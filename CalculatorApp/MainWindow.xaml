@@ -1,0 +1,188 @@
+﻿<Window x:Class="CalculatorApp.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:CalculatorApp"
+        mc:Ignorable="d"
+        KeyDown="Window_KeyDown"
+        Title="Calculator" Height="450" Width="300">
+    <Window.DataContext>
+        <local:Calculator/>
+    </Window.DataContext>
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="20"/>
+            <RowDefinition Height="10"/>
+            <RowDefinition Height="50"/>
+            <RowDefinition Height="50"/>
+            <RowDefinition Height="40"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <Grid Grid.Row="0" Background="Gray">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="30"/>
+                <ColumnDefinition Width="10"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="1.5*"/>
+            </Grid.ColumnDefinitions>
+            <Button x:Name="OpenSettingsButton" Grid.Column="0" Content="≡" PreviewMouseUp="Open_Settings_Click" />
+            <TextBlock Grid.Column="2" Text="{Binding SelectedMode}" Foreground="White" VerticalAlignment="Center" FontSize="15"/>
+            <CheckBox Grid.Column="3" x:Name="digitGrouping" Content="Digit Grouping" HorizontalAlignment="Left" Margin="10,0,0,0" VerticalAlignment="Center" IsChecked="{Binding DigitGrouping}" Foreground="White" FontSize="15"/>
+            <TextBlock Grid.Column="3" Text="{Binding SelectedBase}" x:Name="ProgrammerBase" Visibility="Collapsed" Foreground="White" FontSize="15" HorizontalAlignment="Center"/>
+        </Grid>
+
+        <Grid Grid.Row="2">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="5"/>
+            </Grid.ColumnDefinitions>
+            <TextBlock Grid.Column="0" Text="{Binding Equation, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Bottom" HorizontalAlignment="Right" FontSize="20"/>
+        </Grid>
+
+        <Grid Grid.Row="3">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="5"/>
+            </Grid.ColumnDefinitions>
+            <TextBlock Grid.Column="0" Text="{Binding Result, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Top" HorizontalAlignment="Right" FontSize="20"/>
+        </Grid>
+
+        <Grid x:Name="MemoryPad" Grid.Row="4" Background="DimGray">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <Button Grid.Column="0" Content="MC" Background="DimGray" Foreground="White" Click="Clear_Memory_Stack_Button_Click"/>
+            <Button Grid.Column="1" Content="MR" Background="DimGray" Foreground="White" Click="Display_Top_Memory_Stack_Button_Click"/>
+            <Button Grid.Column="2" Content="M+" Background="DimGray" Foreground="White" Click="Add_Memory_Stack_Button_Click"/>
+            <Button Grid.Column="3" Content="M-" Background="DimGray" Foreground="White" Click="Substract_Memory_Stack_Button_Click"/>
+            <Button Grid.Column="4" Content="MS" Background="DimGray" Foreground="White" Click="Store_In_Memory_Stack_Button_Click"/>
+            <Button Grid.Column="5" Content="M>" Background="DimGray" Foreground="White" Click="Open_Memory_Stack_Button_Click"/>
+        </Grid>
+
+        <Grid Grid.Row="5" Background="Gray" x:Name="StandardPad">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+
+            <Button Grid.Column="0" Grid.Row="0" Content="1/" Foreground="White" Background="DarkGray" Click="Add_Input_Button_Click"/>
+            <Button Grid.Column="0" Grid.Row="1" Content="^2" Foreground="White" Background="DarkGray" Click="Add_Input_Button_Click"/>
+            <Button Grid.Column="0" Grid.Row="2" Content="7" Foreground="White" Background="DarkGray" Click="Add_Input_Button_Click"/>
+            <Button Grid.Column="0" Grid.Row="3" Content="4" Foreground="White" Background="DarkGray" Click="Add_Input_Button_Click"/>
+            <Button Grid.Column="0" Grid.Row="4" Content="1" Foreground="White" Background="DarkGray" Click="Add_Input_Button_Click"/>
+            <Button Grid.Column="0" Grid.Row="5" Content="+/-" Foreground="White" Background="DarkGray" Click="Add_Input_Button_Click"/>
+
+            <Button Grid.Column="1" Grid.Row="0" Content="CE" Foreground="White" Background="DarkGray" Click="ClearE_Button_Click"/>
+            <Button Grid.Column="1" Grid.Row="1" Content="sqrt" Foreground="White" Background="DarkGray" Click="Add_Input_Button_Click"/>
+            <Button Grid.Column="1" Grid.Row="2" Content="8" Foreground="White" Background="DarkGray" Click="Add_Input_Button_Click"/>
+            <Button Grid.Column="1" Grid.Row="3" Content="5" Foreground="White" Background="DarkGray" Click="Add_Input_Button_Click"/>
+            <Button Grid.Column="1" Grid.Row="4" Content="2" Foreground="White" Background="DarkGray" Click="Add_Input_Button_Click"/>
+            <Button Grid.Column="1" Grid.Row="5" Content="0" Foreground="White" Background="DarkGray" Click="Add_Input_Button_Click"/>
+
+            <Button Grid.Column="2" Grid.Row="0" Content="C" Foreground="White" Background="DarkGray" Click="Clear_Button_Click"/>
+            <Button Grid.Column="2" Grid.Row="1" Content="%" Foreground="White" Background="DarkGray" Click="Add_Input_Button_Click"/>
+            <Button Grid.Column="2" Grid.Row="2" Content="9" Foreground="White" Background="DarkGray" Click="Add_Input_Button_Click"/>
+            <Button Grid.Column="2" Grid.Row="3" Content="6" Foreground="White" Background="DarkGray" Click="Add_Input_Button_Click"/>
+            <Button Grid.Column="2" Grid.Row="4" Content="3" Foreground="White" Background="DarkGray" Click="Add_Input_Button_Click"/>
+            <Button Grid.Column="2" Grid.Row="5" Content="." Foreground="White" Background="DarkGray" Click="Add_Input_Button_Click"/>
+
+            <Button Grid.Column="3" Grid.Row="0" Content="←" Foreground="White" Background="DarkGray" Click="Backspace_Button_Click"/>
+            <Button Grid.Column="3" Grid.Row="1" Content="/" Foreground="White" Background="DarkGray" Click="Add_Input_Button_Click"/>
+            <Button Grid.Column="3" Grid.Row="2" Content="*" Foreground="White" Background="DarkGray" Click="Add_Input_Button_Click"/>
+            <Button Grid.Column="3" Grid.Row="3" Content="-" Foreground="White" Background="DarkGray" Click="Add_Input_Button_Click"/>
+            <Button Grid.Column="3" Grid.Row="4" Content="+" Foreground="White" Background="DarkGray" Click="Add_Input_Button_Click"/>
+            <Button Grid.Column="3" Grid.Row="5" Content="=" Foreground="White" Background="DarkGray" Click="Add_Input_Button_Click"/>
+        </Grid>
+        <Grid Grid.Row="6" Visibility="Collapsed" x:Name="Stack">
+            <StackPanel>
+                <ListBox ItemsSource="{Binding memoryStack}" Height="200" />
+            </StackPanel>
+        </Grid>
+        <Popup x:Name="SettingsPopUp" PlacementTarget="{Binding ElementName=OpenSettingsButton}" Placement="Bottom" StaysOpen="False">
+            <Border Background="White" BorderBrush="Gray" BorderThickness="1" Padding="10">
+                <StackPanel>
+                    <Button Content="Standard" Click="Set_Mode_Click"/>
+                    <Button Content="Programmer" Click="Set_Mode_Click"/>
+                </StackPanel>
+            </Border>
+        </Popup>
+
+        <Grid Grid.Row="5" Background="Gray" x:Name="ProgrammerPad" Visibility="Collapsed">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+
+            <Button Grid.Column="0" Grid.Row="0" Content="A" Foreground="White" Background="DarkGray" Click="Add_Input_Button_Click"/>
+            <Button Grid.Column="0" Grid.Row="1" Content="B" Foreground="White" Background="DarkGray" Click="Add_Input_Button_Click"/>
+            <Button Grid.Column="0" Grid.Row="2" Content="C" Foreground="White" Background="DarkGray" Click="Add_Input_Button_Click"/>
+            <Button Grid.Column="0" Grid.Row="3" Content="D" Foreground="White" Background="DarkGray" Click="Add_Input_Button_Click"/>
+            <Button Grid.Column="0" Grid.Row="4" Content="E" Foreground="White" Background="DarkGray" Click="Add_Input_Button_Click"/>
+            <Button Grid.Column="0" Grid.Row="5" Content="F" Foreground="White" Background="DarkGray" Click="Add_Input_Button_Click"/>
+
+            <Button Grid.Column="1" Grid.Row="0" Content="%" Foreground="White" Background="DarkGray" Click="Add_Input_Button_Click"/>
+            <Button Grid.Column="1" Grid.Row="1" Content="7" Foreground="White" Background="DarkGray" Click="Add_Input_Button_Click"/>
+            <Button Grid.Column="1" Grid.Row="2" Content="4" Foreground="White" Background="DarkGray" Click="Add_Input_Button_Click"/>
+            <Button Grid.Column="1" Grid.Row="3" Content="1" Foreground="White" Background="DarkGray" Click="Add_Input_Button_Click"/>
+            <Button Grid.Column="1" Grid.Row="4" Content="+/-" Foreground="White" Background="DarkGray" Click="Add_Input_Button_Click"/>
+            <Button Grid.Column="1" Grid.Row="5" Content="/" Foreground="White" Background="DarkGray" Click="Add_Input_Button_Click"/>
+
+            <Button Grid.Column="2" Grid.Row="0" Content="CE" Foreground="White" Background="DarkGray" Click="ClearE_Button_Click"/>
+            <Button Grid.Column="2" Grid.Row="1" Content="8" Foreground="White" Background="DarkGray" Click="Add_Input_Button_Click"/>
+            <Button Grid.Column="2" Grid.Row="2" Content="5" Foreground="White" Background="DarkGray" Click="Add_Input_Button_Click"/>
+            <Button Grid.Column="2" Grid.Row="3" Content="2" Foreground="White" Background="DarkGray" Click="Add_Input_Button_Click"/>
+            <Button Grid.Column="2" Grid.Row="4" Content="0" Foreground="White" Background="DarkGray" Click="Add_Input_Button_Click"/>
+            <Button Grid.Column="2" Grid.Row="5" Content="+" Foreground="White" Background="DarkGray" Click="Add_Input_Button_Click"/>
+
+            <Button Grid.Column="3" Grid.Row="0" Content="←" Foreground="White" Background="DarkGray" Click="Backspace_Button_Click"/>
+            <Button Grid.Column="3" Grid.Row="1" Content="9" Foreground="White" Background="DarkGray" Click="Add_Input_Button_Click"/>
+            <Button Grid.Column="3" Grid.Row="2" Content="6" Foreground="White" Background="DarkGray" Click="Add_Input_Button_Click"/>
+            <Button Grid.Column="3" Grid.Row="3" Content="3" Foreground="White" Background="DarkGray" Click="Add_Input_Button_Click"/>
+            <Button Grid.Column="3" Grid.Row="4" Content="-" Foreground="White" Background="DarkGray" Click="Add_Input_Button_Click"/>
+            <Button Grid.Column="3" Grid.Row="5" Content="=" Foreground="White" Background="DarkGray" Click="Add_Input_Button_Click"/>
+        </Grid>
+
+        <Grid x:Name="BasePad" Grid.Row="4" Background="DimGray" Visibility="Collapsed">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <Button Grid.Column="0" Content="Bin" Click="Set_Programmer_Base"/>
+            <Button Grid.Column="1" Content="Oct" Click="Set_Programmer_Base"/>
+            <Button Grid.Column="2" Content="Dec" Click="Set_Programmer_Base"/>
+            <Button Grid.Column="3" Content="Hex" Click="Set_Programmer_Base"/>
+        </Grid>
+    </Grid>
+</Window>
